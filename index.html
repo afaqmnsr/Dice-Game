@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <link href="https://fonts.googleapis.com/css?family=Lato:100,300,600" rel="stylesheet" type="text/css">
+        <link href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css">
+        <link type="text/css" rel="stylesheet" href="style.css">
+        
+        <title>Pig Game</title>
+    </head>
+
+    <body>
+        <div class="wrapper clearfix">
+            <div class="player-0-panel active" id="player1">
+                <div class="player-name" id="name-0">Player 1</div>
+                <div class="player-score" id="score-0">43</div>
+                <div class="player-current-box">
+                    <div class="player-current-label">Current</div>
+                    <div class="player-current-score" id="current-0">11</div>
+                </div>
+            </div>
+            
+            <div class="player-1-panel" id="player2">
+                <div class="player-name" id="name-1">Player 2</div>
+                <div class="player-score" id="score-1">72</div>
+                <div class="player-current-box">
+                    <div class="player-current-label">Current</div>
+                    <div class="player-current-score" id="current-1">0</div>
+                </div>
+            </div>
+            
+            <button class="btn-new" onclick="newGame()"><i class="ion-ios-plus-outline"></i>New game</button>
+            <button class="btn-roll" id="btn-roll" onclick="rollDice()"><i class="ion-ios-loop"></i>Roll dice</button>
+            <button class="btn-hold" id="btn-hold" onclick="hold()"><i class="ion-ios-download-outline"></i>Hold</button>
+            
+            <input type="text" placeholder="Final score" class="final-score">
+            
+            <img src="dice-5.png" alt="Dice" class="dice" id="dice-1">
+            <img src="dice-5.png" alt="Dice" class="dice" id="dice-2">
+        </div>
+        
+        <!--<script src="app.js"></script>-->
+        <!-- <script src="challenges.js"></script> -->
+
+        <script type="text/javascript">
+            var currentScore1 = document.getElementById('current-0');
+            var currentScore2 = document.getElementById('current-1');
+
+            var globalScoredisplay1 = document.getElementById('score-0');
+            var globalScoredisplay2 = document.getElementById('score-1');
+
+            var player1 = document.getElementById('player1');
+            var player2 = document.getElementById('player2');
+
+            var winner1 = document.getElementById('name-0');
+            var winner2 = document.getElementById('name-1');
+
+            var dicePic = new Array("dice-1.png","dice-2.png","dice-3.png","dice-4.png","dice-5.png","dice-6.png");
+            var result=0;
+
+            var randomNum=0;
+            var randomNum2=0;
+            
+            var player=true;
+
+            var currentScores1=0;
+            var currentScores2=0;
+
+            var globalScore1=0;
+            var globalScore2=0;
+
+            function rollDice() {
+                randomNum = Math.floor(Math.random() * dicePic.length);
+                randomNum2 = Math.floor(Math.random() * dicePic.length);
+                
+                document.getElementById("dice-1").src = dicePic[randomNum];
+                document.getElementById("dice-2").src = dicePic[randomNum2];
+
+                result = randomNum + randomNum2;
+
+                if(randomNum!=0 && randomNum2!=0)
+                {
+                    if(player==true)
+                    {   
+                        currentScores1=currentScores1+result+2;
+                        currentScore1.innerHTML = currentScores1;
+                    }
+                    else{
+                        currentScores2=currentScores2+result+2;
+                        currentScore2.innerHTML = currentScores2;
+                    }
+                }
+                else{
+                    currentScores2=0;
+                    currentScores1=0;
+                    hold();
+                }
+
+            }
+
+            function hold(){
+
+                    if(player==true)
+                    {
+                        globalScore1=globalScore1+ currentScores1;
+                        
+                        if(globalScore1<100)
+                        {
+                            player1.classList.remove("active");
+                            player2.classList.add("active");
+                        }
+                        
+                        if(randomNum!=0 && randomNum2!=0)
+                        {
+                            // currentScore1.innerHTML = 0;
+                            globalScoredisplay1.innerHTML=globalScore1;
+
+                            if(globalScore1>=100)
+                            {
+                                winner1.innerHTML="Winner!"
+                                document.getElementsByClassName("btn-hold").disabled = true;
+                                document.getElementsByClassName("btn-roll").disabled = true; 
+                            }
+                        }
+
+                        
+                        currentScore1.innerHTML = 0;
+                        currentScores1=0;
+                        
+                        result=0;
+                        player=false;
+                    }
+
+                    else{
+
+                        globalScore2=globalScore2+ currentScores2;
+                        
+                        if(globalScore2<100)
+                        {
+                            player2.classList.remove("active");
+                            player1.classList.add("active");
+                        }
+                        
+                        if(randomNum!=0 && randomNum2!=0)
+                        {
+                            
+                            globalScoredisplay2.innerHTML=globalScore2;
+
+                            if(globalScore2>=100)
+                            {
+                                winner2.innerHTML="Winner!"
+                                document.getElementById("btn-hold").disabled = true;
+                                document.getElementById("btn-roll").disabled = true; 
+                            }
+                        }
+
+                        currentScore2.innerHTML = 0;
+                        currentScores2=0;
+
+                        result=0;
+                        player=true;
+                    }
+                
+            }
+
+            function newGame(){
+                currentScore1.innerHTML=0;
+                currentScore2.innerHTML=0;
+                globalScoredisplay1.innerHTML=0;
+                globalScoredisplay2.innerHTML=0;
+                result=0;
+                globalScore2=0;
+                globalScore1=0;
+                currentScores1=0;
+                currentScores2=0;
+                player=true;
+
+                document.getElementById("dice-1").src = null;
+                document.getElementById("dice-2").src = null;
+
+                winner1.innerHTML="Player 1";
+                winner2.innerHTML="Player 2";
+
+                document.getElementById("btn-hold").disabled = false;
+                document.getElementById("btn-roll").disabled = false; 
+
+            }
+        </script>
+    </body>
+</html>
